@@ -102,13 +102,10 @@
     }
 
     function logTime() {
-      const hrs = String(Math.floor(seconds / 3600)).padStart(2, '0');
-      const mins = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
-      const secs = String(seconds % 60).padStart(2, '0');
-      const timeStr = `${hrs}:${mins}:${secs}`;
-      navigator.clipboard.writeText(timeStr).then(() => {
-        console.log("Time logged:", timeStr);
-        alert("⏱ Time copied: " + timeStr);
+      const decimalHours = (seconds / 3600).toFixed(2);
+      navigator.clipboard.writeText(decimalHours + " hours").then(() => {
+        console.log("Time logged:", decimalHours + " hours");
+        alert("⏱ Time copied: " + decimalHours + " hours");
       });
     }
 
