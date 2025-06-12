@@ -51,6 +51,18 @@
       flex-wrap: wrap;
       justify-content: center;
     }
+
+    #copy-message {
+      font-size: 0.9rem;
+      color: #4caf50;
+      margin-top: 10px;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    #copy-message.visible {
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
@@ -61,6 +73,7 @@
     <button onclick="resetTimer()">Reset</button>
     <button onclick="logTime()">Log Time</button>
   </div>
+  <div id="copy-message">✅ Time copied to clipboard!</div>
 
   <script>
     let timerInterval;
@@ -103,10 +116,24 @@
 
     function logTime() {
       const decimalHours = (seconds / 3600).toFixed(2);
-      navigator.clipboard.writeText(decimalHours + " hours").then(() => {
-        console.log("Time logged:", decimalHours + " hours");
-        alert("⏱ Time copied: " + decimalHours + " hours");
-      });
+      const textToCopy = decimalHours + " hours";
+
+      // Fallback-friendly clipboard copy
+      const textarea = document.createElement("textarea");
+      textarea.value = textToCopy;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textarea);
+
+      console.log("Time logged:", textToCopy);
+
+      // Show message
+      const message = document.getElementById("copy-message");
+      message.classList.add("visible");
+      setTimeout(() => {
+        message.classList.remove("visible");
+      }, 2000);
     }
 
     updateDisplay();
