@@ -11,7 +11,18 @@
       --accent-color: #2f3437;
       --button-bg: #f3f3f3;
       --button-hover: #ebebeb;
-      --border-radius: 6px;
+      --highlight: #4caf50;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --text-color: #e4e4e4;
+        --bg-color: #2f3437;
+        --accent-color: #f3f3f3;
+        --button-bg: #3b3f42;
+        --button-hover: #4a4f53;
+        --highlight: #81c784;
+      }
     }
 
     body {
@@ -37,7 +48,7 @@
       padding: 10px 18px;
       margin: 5px;
       font-size: 1rem;
-      border-radius: var(--border-radius);
+      border-radius: 6px;
       cursor: pointer;
       transition: background-color 0.2s ease;
     }
@@ -54,7 +65,7 @@
 
     #copy-message {
       font-size: 0.9rem;
-      color: #4caf50;
+      color: var(--highlight);
       margin-top: 10px;
       opacity: 0;
       transition: opacity 0.3s ease-in-out;
@@ -128,7 +139,6 @@
 
       console.log("Time logged:", textToCopy);
 
-      // Show message
       const message = document.getElementById("copy-message");
       message.classList.add("visible");
       setTimeout(() => {
