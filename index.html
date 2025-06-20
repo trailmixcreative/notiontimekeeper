@@ -30,26 +30,29 @@
       letter-spacing: 0.05em;
     }
 
+    .button-group {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 5px 0;
+    }
+
     button {
       background-color: var(--button-bg);
       color: var(--accent-color);
       border: 1px solid var(--border-color);
       padding: 10px 18px;
-      margin: 5px;
       font-size: 1rem;
       border-radius: 6px;
       cursor: pointer;
       transition: background-color 0.2s ease;
+      flex: 1 1 auto;
+      min-width: 100px;
     }
 
     button:hover {
       background-color: var(--button-hover);
-    }
-
-    .button-row {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
     }
 
     #copy-message {
@@ -63,16 +66,35 @@
     #copy-message.visible {
       opacity: 1;
     }
+
+    @media (min-width: 500px) {
+      .button-container {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .button-container .button-group {
+        flex: none;
+      }
+    }
   </style>
 </head>
 <body>
   <div id="timer">00:00:00</div>
-  <div class="button-row">
-    <button onclick="startTimer()">Start</button>
-    <button onclick="pauseTimer()">Pause</button>
-    <button onclick="resetTimer()">Reset</button>
-    <button onclick="logTime()">Log Time</button>
+
+  <div class="button-container">
+    <div class="button-group">
+      <button onclick="startTimer()">Start</button>
+      <button onclick="pauseTimer()">Pause</button>
+    </div>
+    <div class="button-group">
+      <button onclick="resetTimer()">Reset</button>
+      <button onclick="logTime()">Log Time</button>
+    </div>
   </div>
+
   <div id="copy-message">✅ Time copied to clipboard!</div>
 
   <script>
