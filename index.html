@@ -6,12 +6,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     :root {
+      /* Shared */
       --text-color: inherit;
       --accent-color: inherit;
       --button-bg: transparent;
       --button-hover: rgba(0, 0, 0, 0.05);
-      --highlight: #4caf50;
       --border-color: rgba(128, 128, 128, 0.3);
+      --highlight: #4caf50;
+    }
+
+    /* Dark-mode overrides */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --text-color: #ffffff;
+        --accent-color: #ffffff;
+        --button-bg: rgba(255, 255, 255, 0.08);
+        --button-hover: rgba(255, 255, 255, 0.15);
+        --border-color: rgba(255, 255, 255, 0.2);
+      }
     }
 
     body {
@@ -47,21 +59,21 @@
       cursor: pointer;
       transition: background-color 0.2s ease;
       flex: 1 1 auto;
-      min-width: 0; /* allows flex-basis calc to work */
+      min-width: 0;
     }
 
     .button-container button:hover {
       background-color: var(--button-hover);
     }
 
-    /* Desktop: four in a row (equal widths) */
+    /* Desktop: four in a row */
     @media (min-width: 601px) {
       .button-container button {
         flex: 1 1 calc((100% - 30px) / 4);
       }
     }
 
-    /* Mobile: two per row (50% width each) */
+    /* Mobile: two per row */
     @media (max-width: 600px) {
       .button-container button {
         flex: 1 1 calc((100% - 10px) / 2);
@@ -83,14 +95,12 @@
 </head>
 <body>
   <div id="timer">00:00:00</div>
-
   <div class="button-container">
     <button onclick="startTimer()">Start</button>
     <button onclick="pauseTimer()">Pause</button>
     <button onclick="resetTimer()">Reset</button>
     <button onclick="logTime()">Log Time</button>
   </div>
-
   <div id="copy-message">✅ Time copied to clipboard!</div>
 
   <script>
@@ -132,14 +142,12 @@
     function logTime() {
       const decimalHours = (seconds / 3600).toFixed(2);
       const textToCopy = decimalHours + " hours";
-
       const ta = document.createElement('textarea');
       ta.value = textToCopy;
       document.body.appendChild(ta);
       ta.select();
       document.execCommand('copy');
       document.body.removeChild(ta);
-
       console.log('Time logged:', textToCopy);
       const msg = document.getElementById('copy-message');
       msg.classList.add('visible');
