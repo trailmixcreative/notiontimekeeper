@@ -30,29 +30,42 @@
       letter-spacing: 0.05em;
     }
 
-    .button-group {
+    .button-container {
       display: flex;
+      flex-wrap: wrap;
       gap: 10px;
       justify-content: center;
-      flex-wrap: wrap;
-      margin: 5px 0;
     }
 
-    button {
+    .button-container button {
       background-color: var(--button-bg);
       color: var(--accent-color);
       border: 1px solid var(--border-color);
-      padding: 10px 18px;
+      padding: 10px 0;
       font-size: 1rem;
       border-radius: 6px;
       cursor: pointer;
       transition: background-color 0.2s ease;
       flex: 1 1 auto;
-      min-width: 100px;
+      min-width: 0; /* allows flex-basis calc to work */
     }
 
-    button:hover {
+    .button-container button:hover {
       background-color: var(--button-hover);
+    }
+
+    /* Desktop: four in a row (equal widths) */
+    @media (min-width: 601px) {
+      .button-container button {
+        flex: 1 1 calc((100% - 30px) / 4);
+      }
+    }
+
+    /* Mobile: two per row (50% width each) */
+    @media (max-width: 600px) {
+      .button-container button {
+        flex: 1 1 calc((100% - 10px) / 2);
+      }
     }
 
     #copy-message {
@@ -66,33 +79,16 @@
     #copy-message.visible {
       opacity: 1;
     }
-
-    @media (min-width: 500px) {
-      .button-container {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-
-      .button-container .button-group {
-        flex: none;
-      }
-    }
   </style>
 </head>
 <body>
   <div id="timer">00:00:00</div>
 
   <div class="button-container">
-    <div class="button-group">
-      <button onclick="startTimer()">Start</button>
-      <button onclick="pauseTimer()">Pause</button>
-    </div>
-    <div class="button-group">
-      <button onclick="resetTimer()">Reset</button>
-      <button onclick="logTime()">Log Time</button>
-    </div>
+    <button onclick="startTimer()">Start</button>
+    <button onclick="pauseTimer()">Pause</button>
+    <button onclick="resetTimer()">Reset</button>
+    <button onclick="logTime()">Log Time</button>
   </div>
 
   <div id="copy-message">✅ Time copied to clipboard!</div>
@@ -101,16 +97,14 @@
     let timerInterval;
     let seconds = 0;
 
-    const savedSeconds = localStorage.getItem('notion_timer_seconds');
-    if (savedSeconds) {
-      seconds = parseInt(savedSeconds);
-    }
+    const saved = localStorage.getItem('notion_timer_seconds');
+    if (saved) seconds = parseInt(saved);
 
     function updateDisplay() {
-      const hrs = String(Math.floor(seconds / 3600)).padStart(2, '0');
-      const mins = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
-      const secs = String(seconds % 60).padStart(2, '0');
-      document.getElementById("timer").textContent = `${hrs}:${mins}:${secs}`;
+      const hrs = String(Math.floor(seconds / 3600)).padStart(2,'0');
+      const mins = String(Math.floor((seconds % 3600)/60)).padStart(2,'0');
+      const secs = String(seconds % 60).padStart(2,'0');
+      document.getElementById('timer').textContent = `${hrs}:${mins}:${secs}`;
     }
 
     function startTimer() {
@@ -139,20 +133,17 @@
       const decimalHours = (seconds / 3600).toFixed(2);
       const textToCopy = decimalHours + " hours";
 
-      const textarea = document.createElement("textarea");
-      textarea.value = textToCopy;
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand("copy");
-      document.body.removeChild(textarea);
+      const ta = document.createElement('textarea');
+      ta.value = textToCopy;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
 
-      console.log("Time logged:", textToCopy);
-
-      const message = document.getElementById("copy-message");
-      message.classList.add("visible");
-      setTimeout(() => {
-        message.classList.remove("visible");
-      }, 2000);
+      console.log('Time logged:', textToCopy);
+      const msg = document.getElementById('copy-message');
+      msg.classList.add('visible');
+      setTimeout(() => msg.classList.remove('visible'), 2000);
     }
 
     updateDisplay();
